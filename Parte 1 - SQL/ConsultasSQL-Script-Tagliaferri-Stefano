@@ -52,7 +52,10 @@ Por lo tanto tienen al menos 1 producto.*/
 por lo tanto se fija si hay ventas en los últimos ~(31*2) días.*/
 	
 	SELECT r.*
-	FROM venta v join producto p ON v.codigo_producto = p.codigo
-	JOIN rubro r on r.id_rubro = p.id_rubro
-	WHERE v.fecha <  CURRENT_DATE - INTERVAL '2 months'
-	GROUP BY r.id_rubro
+	FROM rubro r
+	WHERE r.id_rubro NOT IN (
+		SELECT r2.id_rubro
+		FROM venta v2 join producto p2 ON v2.codigo_producto = p2.codigo
+		JOIN rubro r2 on r2.id_rubro = p2.id_rubro
+		WHERE v2.fecha > CURRENT_DATE - INTERVAL '2 months'
+		GROUP BY r2.id_rubro)
