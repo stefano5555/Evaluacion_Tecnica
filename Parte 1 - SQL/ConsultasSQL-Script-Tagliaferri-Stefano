@@ -1,0 +1,58 @@
+/* Todos los productos del rubro "libreria", creados hoy.*/
+
+	SELECT p.*
+	FROM producto p JOIN rubro r ON p.id_rubro = r.id_rubro
+	WHERE r.rubro = 'libreria' AND p.fecha_creacion = CURRENT_DATE
+
+/* Monto total vendido por cliente (mostrar nombre del cliente y monto). */
+
+	SELECT c.razon_social, SUM(v.precio) AS monto_total
+	FROM cliente c JOIN venta v ON c.id_cliente = v.id_cliente
+	GROUP BY c.id_cliente
+
+/*• Cantidad de ventas por producto.
+
+// cantidad de ventas por producto. Contando las ventas.*/
+
+	SELECT p.nombre, COUNT(v.codigo_producto) as cantidad_de_ventas
+	FROM producto p JOIN venta v ON p.codigo = v.codigo_producto
+	GROUP BY p.codigo
+	
+/*// cantidad de ventas por producto considerando la cantidad de productos en cada venta.*/
+
+	SELECT p.nombre, SUM(v.cantidad) as cantidad_de_ventas
+	FROM producto p JOIN venta v ON p.codigo = v.codigo_producto
+	GROUP BY p.codigo
+ 
+/*• Cantidad de productos comprados por cliente en el mes actual.
+
+// comparo mes y año porque solo quiero mostrar las entradas del mes y el año actuales. 
+No del mismo mes, pero de años anteriores. 
+En caso de querer mostrar todas las entradas históricas para el mismo mes que el actual la segunda condición no iría.*/
+
+	SELECT c.razon_social, SUM(v.cantidad) as cantidad_productos_comprados
+	FROM cliente c JOIN venta v ON c.id_cliente = v.id_cliente
+	WHERE EXTRACT(MONTH from v.fecha) = EXTRACT(MONTH from CURRENT_DATE)
+	AND	EXTRACT(YEAR from v.fecha) = EXTRACT(YEAR from CURRENT_DATE)
+	GROUP BY c.id_cliente
+
+/*• Ventas que tienen al menos un producto del rubro "bazar".
+
+// funciona bajo la condición de el atributo cantidad de la tabla venta no puede ser 0, 
+Por lo tanto tienen al menos 1 producto.*/
+
+	SELECT  v.*
+	FROM venta v join producto p ON v.codigo_producto = p.codigo
+	JOIN rubro r on r.id_rubro = p.id_rubro
+	WHERE r.rubro = 'bazar'
+
+/*• Rubros que no tienen ventas en los ultimos 2 meses.
+
+// revisa las entradas con fechas en los 2 últimos meses en formato días, 
+por lo tanto se fija si hay ventas en los últimos ~(31*2) días.*/
+	
+	SELECT r.*
+	FROM venta v join producto p ON v.codigo_producto = p.codigo
+	JOIN rubro r on r.id_rubro = p.id_rubro
+	WHERE v.fecha <  CURRENT_DATE - INTERVAL '2 months'
+	GROUP BY r.id_rubro

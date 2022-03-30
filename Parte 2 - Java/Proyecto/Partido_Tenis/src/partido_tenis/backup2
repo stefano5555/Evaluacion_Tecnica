@@ -1,0 +1,154 @@
+if(verificarVictoria() == false)
+        {
+            if (setActual.isEstaEnTie() == false) {
+            if (setActual.getGameActual().isFinalizado() == false) {
+                setActual.jugarPunto();
+
+                SB.append(setActual.getJugador1().getNombre() + " puntos: " + setActual.getGameActual().getPuntosJugador1());
+                txtResultadoActual1.setText(setActual.getGameActual().getPuntosJugador1());
+                SB.append("\n");
+                SB.append(setActual.getJugador2().getNombre() + " puntos: " + setActual.getGameActual().getPuntosJugador2());
+                txtResultadoActual2.setText(setActual.getGameActual().getPuntosJugador2());
+                SB.append("\n");
+                SB.append("------------");
+                SB.append("\n");
+
+                if (setActual.getGameActual().isFinalizado()) {
+                    cargarTextBoxs(setActual.getNumeroDeSet(), setActual.isEstaEnTie());
+                }
+
+            } else {
+                if (setActual.getGameActual().isFinalizado()) {
+                    if (setActual.obtenerGanador() == 1) {
+                        victoriasJugador1++;
+                        SB.append("----> Gana set " + setActual.getNumeroDeSet() + " Jugador " + jugador1.getNombre() + " <----");
+                        SB.append("\n");
+                        SB.append("------------");
+                        SB.append("\n");
+                        if(verificarVictoria() == false)
+                        {
+                            empezarNuevoSet();
+                            checkearUltimoSet();
+                        }
+                        
+                    } else {
+                        if (setActual.obtenerGanador() == 2) {
+                            victoriasJugador2++;
+                            SB.append("----> Gana set " + setActual.getNumeroDeSet() + " Jugador " + jugador2.getNombre() + " <----");
+                            SB.append("\n");
+                            SB.append("------------");
+                            SB.append("\n");
+                            if(verificarVictoria() == false)
+                            {
+                                empezarNuevoSet();
+                                checkearUltimoSet();
+                            }
+                            
+                        } else {
+                            if (setActual.obtenerGanador() == 0) {
+                               empezarNuevoGame();
+                                if(setActual.isEstaEnTie())
+                                {
+                                    SB.append("COMIENZA TIE PARA DESEMPATE");
+                                    SB.append("\n");
+                                    SB.append("------------");
+                                    SB.append("\n");
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+        else
+        {
+            if (setActual.getGameActual().isFinalizado() == false) {
+                setActual.jugarPunto();
+
+                SB.append(setActual.getJugador1().getNombre() + " puntos: " + setActual.getGameActual().getPuntosJugador1());
+                txtResultadoActual1.setText(setActual.getGameActual().getPuntosJugador1());
+                SB.append("\n");
+                SB.append(setActual.getJugador2().getNombre() + " puntos: " + setActual.getGameActual().getPuntosJugador2());
+                txtResultadoActual2.setText(setActual.getGameActual().getPuntosJugador2());
+                SB.append("\n");
+                SB.append("------------");
+                SB.append("\n");
+
+                if (setActual.getGameActual().isFinalizado()) {
+                    cargarTextBoxs(setActual.getNumeroDeSet(), setActual.isEstaEnTie());
+                }
+
+            } else {
+                if (setActual.getGameActual().isFinalizado()) {
+                    if (setActual.obtenerGanadorTie() == 1) {
+                        victoriasJugador1++;
+                        setActual.finalizarTie(1);
+                        cargarTextBoxs(setActual.getNumeroDeSet(), setActual.isEstaEnTie());
+                        SB.append("----> Gana set de Tie " + setActual.getNumeroDeSet() + " Jugador " + jugador1.getNombre() + " <----");
+                        SB.append("\n");
+                        SB.append("------------");
+                        SB.append("\n");
+                        if(verificarVictoria() == false)
+                        {
+                            empezarNuevoSet();
+                        }
+                        
+                    } else {
+                        if (setActual.obtenerGanadorTie() == 2) {
+                            setActual.finalizarTie(2);
+                            cargarTextBoxs(setActual.getNumeroDeSet(), setActual.isEstaEnTie());
+                            victoriasJugador2++;
+                            SB.append("----> Gana set " + setActual.getNumeroDeSet() + " Jugador " + jugador2.getNombre() + "<----");
+                            SB.append("\n");
+                            SB.append("------------");
+                            SB.append("\n");
+                            if(verificarVictoria() == false)
+                            {
+                                empezarNuevoSet();
+                            }
+                            
+                        } else {
+                            if (setActual.obtenerGanadorTie() == 0) {
+                                
+                                empezarNuevoGame();
+                                
+                            }
+                        }
+
+                    }
+
+                }
+            }
+           
+        }
+            
+        }
+        else
+        {
+            if((cantidadPartidos == 3 && victoriasJugador1 == 2) || (cantidadPartidos == 5 && victoriasJugador1 == 3))
+            {
+                SB.append("Jugador: " + jugador1.getNombre() + " GANA EL PARTIDO");
+                SB.append("\n");
+                SB.append("------------");
+                SB.append("\n");
+            }
+            else
+            {
+                if((cantidadPartidos == 3 && victoriasJugador2 == 2) || (cantidadPartidos == 5 && victoriasJugador2 == 3))
+                {
+                    SB.append("Jugador: " + jugador2.getNombre() + " GANA EL PARTIDO");
+                    SB.append("\n");
+                    SB.append("------------");
+                    SB.append("\n");
+                }
+            }
+        }
+        
+        
+        txtAreaDesarrollo.setText(SB.toString());
+        System.out.println(setActual.isUltimoSet());
+        
+
